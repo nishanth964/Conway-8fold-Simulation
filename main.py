@@ -1,7 +1,5 @@
 from game import Game
 
-
-# Create and run the game.
+# Game object to run the game.
 game = Game()
 game.run()
-
