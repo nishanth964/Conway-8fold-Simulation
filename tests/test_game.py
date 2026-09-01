@@ -124,7 +124,7 @@ def test_glider():
 def test_simulation_state():
     game = Game()
 
-    assert game.simulation_running is True
+    assert game.simulation_running is False
     assert game.generation == 0
     assert game.generation_interval == 0.5
     assert game.generation_timer == 0

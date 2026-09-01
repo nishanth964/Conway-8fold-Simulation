@@ -17,7 +17,7 @@ class Game:
 
         self.window = pygame.display.set_mode((self.width, self.height))
 
-        self.simulation_running = True
+        self.simulation_running = False
         self.generation = 0
         self.generation_interval = 0.5
         self.generation_timer = 0
@@ -123,6 +123,18 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+
+                # Mouse detection and handeling
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    x, y = event.pos
+
+                    if y < self.simulationSize:
+                        row, column = self.screen_to_grid(x, y)
+
+                        if self.get_cell(row, column) == 0:
+                            self.set_cell(row, column, 1)
+                        else:
+                            self.set_cell(row, column, 0)
 
             # Time
             delta_time = self.clock.tick(60) / 1000
