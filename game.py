@@ -14,7 +14,13 @@ class Game:
         self.controllersSize = 150
 
         self.clock = pygame.time.Clock()
+
         self.window = pygame.display.set_mode((self.width, self.height))
+
+        self.simulation_running = True
+        self.generation = 0
+        self.generation_interval = 0.5
+        self.generation_timer = 0
 
         # Simulation Area
         self.simulationArea = pygame.Rect(
@@ -27,9 +33,6 @@ class Game:
 
         # 2d Grid 0- dead, 1 -alive
         self.grid = [[0 for _ in range(self.gridSize)] for _ in range(self.gridSize)]
-
-        # Test alive cell
-        self.set_cell(10, 20, 1)
 
     def get_cell(self, row, column):
         return self.grid[row][column]
@@ -60,10 +63,7 @@ class Game:
         return count
 
     def next_generation(self):
-        next_grid = [
-            [0 for _ in range(self.gridSize)]
-            for _ in range(self.gridSize)
-        ]
+        next_grid = [[0 for _ in range(self.gridSize)] for _ in range(self.gridSize)]
 
         for row in range(self.gridSize):
             for column in range(self.gridSize):
@@ -118,21 +118,38 @@ class Game:
     def run(self):
         self.running = True
 
-        # quit handeling
         while self.running:
+            # Quit handling
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
 
+            # Time
+            delta_time = self.clock.tick(60) / 1000
+
+            # Update simulation
+            if self.simulation_running:
+                self.generation_timer += delta_time
+
+                if self.generation_timer >= self.generation_interval:
+                    self.next_generation()
+                    self.generation += 1
+                    self.generation_timer -= self.generation_interval
+
+            # Draw
             self.window.fill((10, 10, 10))
 
             self.draw_cells()
             self.draw_grid()
 
             # Simulation boundary
-            pygame.draw.rect(self.window, (255, 255, 255), self.simulationArea, 1)
+            pygame.draw.rect(
+                self.window,
+                (255, 255, 255),
+                self.simulationArea,
+                1,
+            )
 
             pygame.display.flip()
-            self.clock.tick(60)
 
-        pygame.quit()
+    pygame.quit()
