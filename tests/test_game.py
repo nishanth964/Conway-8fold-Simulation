@@ -28,9 +28,8 @@ def test_grid_size():
     assert game.gridSize == 200
     assert game.cellSize == 4
 
-    pygame.quit()
 
-def test_grid_size():
+def test_grid_data_size():
     game = Game()
 
     assert len(game.grid) == 200
@@ -121,3 +120,11 @@ def test_glider():
     assert game.get_cell(13, 11) == 1
     assert game.get_cell(13, 12) == 1
     assert game.get_cell(13, 13) == 1
+
+def test_simulation_state():
+    game = Game()
+
+    assert game.simulation_running is True
+    assert game.generation == 0
+    assert game.generation_interval == 0.5
+    assert game.generation_timer == 0
