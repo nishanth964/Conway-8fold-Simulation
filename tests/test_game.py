@@ -60,3 +60,64 @@ def test_screen_to_grid():
 
     assert row == 10
     assert column == 20
+
+def test_count_neighbors():
+    game = Game()
+
+    game.set_cell(10, 10, 1)
+    game.set_cell(10, 11, 1)
+    game.set_cell(11, 10, 1)
+
+    assert game.count_neighbors(11, 11) == 3
+
+def test_block():
+    game = Game()
+
+    game.set_cell(10, 10, 1)
+    game.set_cell(10, 11, 1)
+    game.set_cell(11, 10, 1)
+    game.set_cell(11, 11, 1)
+
+    game.next_generation()
+
+    assert game.get_cell(10, 10) == 1
+    assert game.get_cell(10, 11) == 1
+    assert game.get_cell(11, 10) == 1
+    assert game.get_cell(11, 11) == 1
+
+def test_blinker():
+    game = Game()
+
+    game.set_cell(10, 9, 1)
+    game.set_cell(10, 10, 1)
+    game.set_cell(10, 11, 1)
+
+    game.next_generation()
+
+    assert game.get_cell(9, 10) == 1
+    assert game.get_cell(10, 10) == 1
+    assert game.get_cell(11, 10) == 1
+
+    assert game.get_cell(10, 9) == 0
+    assert game.get_cell(10, 11) == 0
+
+def test_glider():
+    game = Game()
+
+    # Initial glider
+    game.set_cell(10, 11, 1)
+    game.set_cell(11, 12, 1)
+    game.set_cell(12, 10, 1)
+    game.set_cell(12, 11, 1)
+    game.set_cell(12, 12, 1)
+
+    # Advance 4 generations
+    for _ in range(4):
+        game.next_generation()
+
+    # Glider should have moved one cell down and right
+    assert game.get_cell(11, 12) == 1
+    assert game.get_cell(12, 13) == 1
+    assert game.get_cell(13, 11) == 1
+    assert game.get_cell(13, 12) == 1
+    assert game.get_cell(13, 13) == 1
