@@ -1,9 +1,7 @@
-import pygame
-
 from controls import Controls
 
 
-def test_buttons():
+def test_controls_initialization():
 
     controls = Controls()
 
@@ -20,7 +18,7 @@ def test_buttons():
     assert controls.stepButton.height == 40
 
 
-def test_speed_slider():
+def test_slider_initialization():
 
     controls = Controls()
 
@@ -31,28 +29,54 @@ def test_speed_slider():
     assert controls.slider_max == 1.0
     assert controls.slider_value == 0.5
 
+    assert controls.slider_dragging is False
 
-def test_slider_update():
-
-    controls = Controls()
-
-    controls.update_slider(controls.slider.left)
-
-    assert controls.slider_value == 1.0
-
-    controls.update_slider(controls.slider.right)
-
-    assert abs(controls.slider_value - 0.05) < 0.000001
+    assert controls.slider_area.width == 220
+    assert controls.slider_area.height == 50
 
 
-def test_slider_stays_inside_range():
+def test_slider_update_left():
 
     controls = Controls()
 
-    controls.update_slider(0)
+    value = controls.update_slider(controls.slider.left)
 
-    assert controls.slider_value == 1.0
+    assert value == controls.slider_max
 
-    controls.update_slider(1000)
 
-    assert abs(controls.slider_value - 0.05) < 0.000001
+def test_slider_update_right():
+
+    controls = Controls()
+
+    value = controls.update_slider(controls.slider.right)
+
+    assert value == controls.slider_min
+
+
+def test_slider_update_middle():
+
+    controls = Controls()
+
+    middle = controls.slider.centerx
+
+    value = controls.update_slider(middle)
+
+    assert round(value, 2) == 0.53
+
+
+def test_slider_clamps_left():
+
+    controls = Controls()
+
+    value = controls.update_slider(-100)
+
+    assert value == controls.slider_max
+
+
+def test_slider_clamps_right():
+
+    controls = Controls()
+
+    value = controls.update_slider(1000)
+
+    assert value == controls.slider_min

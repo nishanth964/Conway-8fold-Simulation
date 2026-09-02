@@ -33,6 +33,7 @@ def test_generation_counter():
     assert game.generation == 0
 
     game.grid.next_generation()
+
     game.generation += 1
 
     assert game.generation == 1
@@ -45,13 +46,17 @@ def test_restart_state():
     game.grid.set_cell(10, 10, 1)
 
     game.generation = 5
+
     game.simulation_running = True
 
     game.restart()
 
     assert game.grid.get_cell(10, 10) == 0
+
     assert game.generation == 0
+
     assert game.simulation_running is False
+
     assert game.generation_timer == 0
 
 
