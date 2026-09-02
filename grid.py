@@ -65,3 +65,44 @@ class Grid:
 
     def clear(self):
         self.grid = [[0 for _ in range(self.gridSize)] for _ in range(self.gridSize)]
+
+    def get_center(self):
+        center = (self.gridSize - 1) / 2
+
+        return center
+
+    def get_symmetric_cells(self, row, column):
+
+        center = self.get_center()
+
+        reflected_row = int(2 * center - row)
+
+        reflected_column = int(2 * center - column)
+
+        cells = {
+            (row, column),
+            (row, reflected_column),
+            (reflected_row, column),
+            (reflected_row, reflected_column),
+            (column, row),
+            (column, reflected_row),
+            (reflected_column, row),
+            (reflected_column, reflected_row),
+        }
+
+        valid_cells = set()
+
+        for cell_row, cell_column in cells:
+
+            if 0 <= cell_row < self.gridSize and 0 <= cell_column < self.gridSize:
+                valid_cells.add((cell_row, cell_column))
+
+        return valid_cells
+
+    def set_symmetric_cell(self, row, column, state):
+
+        cells = self.get_symmetric_cells(row, column)
+
+        for cell_row, cell_column in cells:
+
+            self.set_cell(cell_row, cell_column, state)

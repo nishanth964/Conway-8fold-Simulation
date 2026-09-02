@@ -123,3 +123,64 @@ def test_clear():
     grid.clear()
 
     assert grid.get_cell(10, 10) == 0
+
+
+def test_get_center():
+
+    grid = Grid(200, 800)
+
+    assert grid.get_center() == 99.5
+
+
+def test_get_symmetric_cells():
+
+    grid = Grid(200, 800)
+
+    cells = grid.get_symmetric_cells(90, 110)
+
+    expected = {
+        (90, 110),
+        (90, 89),
+        (109, 110),
+        (109, 89),
+        (110, 90),
+        (110, 109),
+        (89, 90),
+        (89, 109),
+    }
+
+    assert cells == expected
+
+
+def test_symmetric_cells_stay_inside_grid():
+
+    grid = Grid(200, 800)
+
+    cells = grid.get_symmetric_cells(0, 0)
+
+    for row, column in cells:
+
+        assert 0 <= row < 200
+        assert 0 <= column < 200
+
+
+def test_set_symmetric_cell():
+
+    grid = Grid(200, 800)
+
+    grid.set_symmetric_cell(90, 110, 1)
+
+    expected = {
+        (90, 110),
+        (90, 89),
+        (109, 110),
+        (109, 89),
+        (110, 90),
+        (110, 109),
+        (89, 90),
+        (89, 109),
+    }
+
+    for row, column in expected:
+
+        assert grid.get_cell(row, column) == 1

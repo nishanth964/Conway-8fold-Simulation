@@ -97,11 +97,11 @@ class Game:
 
                         if self.grid.get_cell(row, column) == 0:
 
-                            self.grid.set_cell(row, column, 1)
+                            self.grid.set_symmetric_cell(row, column, 1)
 
                         else:
 
-                            self.grid.set_cell(row, column, 0)
+                            self.grid.set_symmetric_cell(row, column, 0)
 
                 # Move slider while holding mouse button
                 if event.type == pygame.MOUSEMOTION:
