@@ -88,6 +88,19 @@ To run the test suite:
 ```bash
 python -m pytest
 ```
+The tests cover areas including:
+
+* Game of Life rules
+* Neighbor counting
+* Blinker
+* Block
+* Glider
+* 8-fold symmetry
+* Grid boundaries
+* Generation state
+* Controls
+* Rendering
+
 
 
 ## 8-Fold Symmetry
@@ -104,40 +117,6 @@ When a cell is placed, the program calculates its corresponding positions throug
 The resulting pattern is therefore mirrored around the center of the simulation.
 
 As generations evolve, the symmetric structure produces complex, mandala-like patterns.
-
-
-## Running the Simulation
-
-Start the program with:
-
-```bash
-python main.py
-```
-
-A Pygame window will open containing the simulation and controls.
-
-## Running Tests
-
-The project includes automated tests for the main components.
-
-Run the complete test suite with:
-
-```bash
-python -m pytest
-```
-
-The tests cover areas including:
-
-* Game of Life rules
-* Neighbor counting
-* Blinker
-* Block
-* Glider
-* 8-fold symmetry
-* Grid boundaries
-* Generation state
-* Controls
-* Rendering
 
 ## Project Goal
 
