@@ -32,6 +32,7 @@ class Game:
         self.is_drawing = False
         self.last_drawn_cell = None
 
+        # Font
         self.font = pygame.font.Font(None, 24)
 
         # Simulation area
@@ -39,6 +40,7 @@ class Game:
             0, 0, self.simulationSize, self.simulationSize
         )
 
+        # Control area
         self.controlArea = pygame.Rect(
             0, self.simulationSize, self.width, self.controllersSize
         )
@@ -61,128 +63,140 @@ class Game:
         self.generation = 0
         self.generation_timer = 0
 
+    def handle_mouse_down(self, event):
+
+        x, y = event.pos
+
+        if self.controls.startButton.collidepoint(x, y):
+
+            self.simulation_running = True
+
+        elif self.controls.stopButton.collidepoint(x, y):
+
+            self.simulation_running = False
+
+        elif self.controls.restartButton.collidepoint(x, y):
+
+            self.restart()
+
+        elif self.controls.stepButton.collidepoint(x, y):
+
+            self.grid.next_generation()
+            self.generation += 1
+
+        elif self.controls.slider_area.collidepoint(x, y):
+
+            self.controls.slider_dragging = True
+
+            self.generation_interval = self.controls.update_slider(x)
+
+        elif y < self.simulationSize:
+
+            row, column = self.grid.screen_to_grid(x, y)
+
+            self.is_drawing = True
+
+            self.last_drawn_cell = (row, column)
+
+            if self.grid.get_cell(row, column) == 0:
+
+                self.grid.set_symmetric_cell(row, column, 1)
+
+            else:
+
+                self.grid.set_symmetric_cell(row, column, 0)
+
+    def handle_mouse_motion(self, event):
+
+        x, y = event.pos
+
+        if self.controls.slider_dragging:
+
+            self.generation_interval = self.controls.update_slider(x)
+
+        elif self.is_drawing:
+
+            if y < self.simulationSize:
+
+                row, column = self.grid.screen_to_grid(x, y)
+
+                current_cell = (row, column)
+
+                if current_cell != self.last_drawn_cell:
+
+                    self.grid.set_symmetric_cell(row, column, 1)
+
+                    self.last_drawn_cell = current_cell
+
+    def handle_mouse_up(self):
+
+        self.controls.slider_dragging = False
+        self.is_drawing = False
+        self.last_drawn_cell = None
+
+    def handle_events(self):
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+
+                self.running = False
+
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+
+                self.handle_mouse_down(event)
+
+            elif event.type == pygame.MOUSEMOTION:
+
+                self.handle_mouse_motion(event)
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+
+                self.handle_mouse_up()
+
+    def update(self, delta_time):
+
+        if not self.simulation_running:
+            return
+
+        self.generation_timer += delta_time
+
+        while self.generation_timer >= self.generation_interval:
+
+            self.grid.next_generation()
+
+            self.generation += 1
+
+            self.generation_timer -= self.generation_interval
+
+    def draw(self):
+
+        self.window.fill((5, 5, 8))
+
+        self.drawing.draw_cells(self.grid, self.generation)
+
+        self.drawing.draw_grid(self.grid)
+
+        self.drawing.draw_controls(
+            self.controls, self.generation, self.simulation_running
+        )
+
+        self.drawing.draw_boundary(self.simulationArea)
+
+        pygame.display.flip()
+
     def run(self):
 
         self.running = True
 
         while self.running:
 
-            # Events
-            for event in pygame.event.get():
+            self.handle_events()
 
-                if event.type == pygame.QUIT:
-
-                    self.running = False
-
-                # Mouse button pressed
-                if event.type == pygame.MOUSEBUTTONDOWN:
-
-                    x, y = event.pos
-
-                    if self.controls.startButton.collidepoint(x, y):
-
-                        self.simulation_running = True
-
-                    elif self.controls.stopButton.collidepoint(x, y):
-
-                        self.simulation_running = False
-
-                    elif self.controls.restartButton.collidepoint(x, y):
-
-                        self.restart()
-
-                    elif self.controls.stepButton.collidepoint(x, y):
-
-                        self.grid.next_generation()
-                        self.generation += 1
-
-                    elif self.controls.slider.collidepoint(x, y):
-
-                        self.controls.slider_dragging = True
-
-                        self.generation_interval = self.controls.update_slider(x)
-
-                    elif y < self.simulationSize:
-
-                        row, column = self.grid.screen_to_grid(x, y)
-
-                        self.is_drawing = True
-
-                        self.last_drawn_cell = (row, column)
-
-                        # Click toggles the cell
-                        if self.grid.get_cell(row, column) == 0:
-
-                            self.grid.set_symmetric_cell(row, column, 1)
-
-                        else:
-
-                            self.grid.set_symmetric_cell(row, column, 0)
-
-                # Mouse movement
-                if event.type == pygame.MOUSEMOTION:
-
-                    if self.controls.slider_dragging:
-
-                        self.generation_interval = self.controls.update_slider(
-                            event.pos[0]
-                        )
-
-                    elif self.is_drawing:
-
-                        x, y = event.pos
-
-                        if y < self.simulationSize:
-
-                            row, column = self.grid.screen_to_grid(x, y)
-
-                            current_cell = (row, column)
-
-                            if current_cell != self.last_drawn_cell:
-
-                                self.grid.set_symmetric_cell(row, column, 1)
-
-                                self.last_drawn_cell = current_cell
-
-                # Mouse button released
-                if event.type == pygame.MOUSEBUTTONUP:
-
-                    self.controls.slider_dragging = False
-                    self.is_drawing = False
-                    self.last_drawn_cell = None
-
-            # Time
             delta_time = self.clock.tick(60) / 1000
 
-            # Simulation
-            if self.simulation_running:
+            self.update(delta_time)
 
-                self.generation_timer += delta_time
-
-                if self.generation_timer >= self.generation_interval:
-
-                    self.grid.next_generation()
-                    self.generation += 1
-
-                    self.generation_timer -= self.generation_interval
-
-            # Background
-            self.window.fill((5, 5, 8))
-
-            # Cells
-            self.drawing.draw_cells(self.grid, self.generation)
-
-            # Grid
-            self.drawing.draw_grid(self.grid)
-
-            # Controls
-            self.drawing.draw_controls(
-                self.controls, self.generation, self.simulation_running
-            )
-
-            # Boundary
-            self.drawing.draw_boundary(self.simulationArea)
-
-            pygame.display.flip()
+            self.draw()
 
         pygame.quit()

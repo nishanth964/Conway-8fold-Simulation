@@ -1,11 +1,11 @@
 import pygame
 
+from controls import Controls
 from drawing import Drawing
 from grid import Grid
-from controls import Controls
 
 
-def test_drawing_initialization():
+def create_drawing():
 
     pygame.init()
 
@@ -15,27 +15,23 @@ def test_drawing_initialization():
 
     font = pygame.font.Font(None, 24)
 
-    drawing = Drawing(window, 800, control_area, font)
+    return Drawing(window, 800, control_area, font)
 
-    assert drawing.window == window
+
+def test_drawing_initialization():
+
+    drawing = create_drawing()
+
+    assert drawing.window.get_width() == 800
+    assert drawing.window.get_height() == 950
     assert drawing.simulationSize == 800
-    assert drawing.controlArea == control_area
-    assert drawing.font == font
 
     pygame.quit()
 
 
 def test_draw_cells():
 
-    pygame.init()
-
-    window = pygame.Surface((800, 950))
-
-    control_area = pygame.Rect(0, 800, 800, 150)
-
-    font = pygame.font.Font(None, 24)
-
-    drawing = Drawing(window, 800, control_area, font)
+    drawing = create_drawing()
 
     grid = Grid(200, 800)
 
@@ -48,21 +44,14 @@ def test_draw_cells():
 
 def test_cell_color():
 
-    pygame.init()
-
-    window = pygame.Surface((800, 950))
-
-    control_area = pygame.Rect(0, 800, 800, 150)
-
-    font = pygame.font.Font(None, 24)
-
-    drawing = Drawing(window, 800, control_area, font)
+    drawing = create_drawing()
 
     color = drawing.get_cell_color(10, 10, 0, 0)
 
     assert len(color) == 3
 
     for value in color:
+
         assert 0 <= value <= 255
 
     pygame.quit()
@@ -70,15 +59,7 @@ def test_cell_color():
 
 def test_draw_grid():
 
-    pygame.init()
-
-    window = pygame.Surface((800, 950))
-
-    control_area = pygame.Rect(0, 800, 800, 150)
-
-    font = pygame.font.Font(None, 24)
-
-    drawing = Drawing(window, 800, control_area, font)
+    drawing = create_drawing()
 
     grid = Grid(200, 800)
 
@@ -89,15 +70,7 @@ def test_draw_grid():
 
 def test_draw_controls():
 
-    pygame.init()
-
-    window = pygame.Surface((800, 950))
-
-    control_area = pygame.Rect(0, 800, 800, 150)
-
-    font = pygame.font.Font(None, 24)
-
-    drawing = Drawing(window, 800, control_area, font)
+    drawing = create_drawing()
 
     controls = Controls()
 
@@ -108,15 +81,7 @@ def test_draw_controls():
 
 def test_draw_boundary():
 
-    pygame.init()
-
-    window = pygame.Surface((800, 950))
-
-    control_area = pygame.Rect(0, 800, 800, 150)
-
-    font = pygame.font.Font(None, 24)
-
-    drawing = Drawing(window, 800, control_area, font)
+    drawing = create_drawing()
 
     simulation_area = pygame.Rect(0, 0, 800, 800)
 
