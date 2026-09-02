@@ -53,3 +53,20 @@ def test_restart_state():
     assert game.generation == 0
     assert game.simulation_running is False
     assert game.generation_timer == 0
+
+
+def test_drawing_state():
+
+    game = Game()
+
+    assert game.is_drawing is False
+    assert game.last_drawn_cell is None
+
+
+def test_drawing_cell():
+
+    game = Game()
+
+    game.grid.set_symmetric_cell(90, 110, 1)
+
+    assert game.grid.get_cell(90, 110) == 1

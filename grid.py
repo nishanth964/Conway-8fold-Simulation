@@ -106,3 +106,14 @@ class Grid:
         for cell_row, cell_column in cells:
 
             self.set_cell(cell_row, cell_column, state)
+
+    def load_pattern(self, pattern, row, column):
+
+        self.clear()
+
+        for pattern_row, pattern_column in pattern:
+
+            target_row = row + pattern_row
+            target_column = column + pattern_column
+
+            self.set_symmetric_cell(target_row, target_column, 1)

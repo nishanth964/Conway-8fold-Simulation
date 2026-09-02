@@ -184,3 +184,38 @@ def test_set_symmetric_cell():
     for row, column in expected:
 
         assert grid.get_cell(row, column) == 1
+
+
+def test_load_pattern():
+
+    grid = Grid(200, 800)
+
+    pattern = [
+        (0, 0),
+        (0, 1),
+        (1, 0),
+        (1, 1),
+    ]
+
+    grid.load_pattern(pattern, 50, 50)
+
+    cells = grid.get_symmetric_cells(50, 50)
+
+    for row, column in cells:
+
+        assert grid.get_cell(row, column) == 1
+
+
+def test_load_pattern_clears_grid():
+
+    grid = Grid(200, 800)
+
+    grid.set_cell(10, 10, 1)
+
+    pattern = [
+        (0, 0),
+    ]
+
+    grid.load_pattern(pattern, 50, 50)
+
+    assert grid.get_cell(10, 10) == 0

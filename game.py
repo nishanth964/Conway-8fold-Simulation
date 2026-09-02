@@ -20,12 +20,16 @@ class Game:
         self.controllersSize = 150
 
         self.clock = pygame.time.Clock()
+
         self.window = pygame.display.set_mode((self.width, self.height))
 
         self.simulation_running = False
         self.generation = 0
         self.generation_interval = 0.5
         self.generation_timer = 0
+
+        self.is_drawing = False
+        self.last_drawn_cell = None
 
         self.font = pygame.font.Font(None, 24)
 
@@ -95,6 +99,9 @@ class Game:
 
                         row, column = self.grid.screen_to_grid(x, y)
 
+                        self.is_drawing = True
+                        self.last_drawn_cell = (row, column)
+
                         if self.grid.get_cell(row, column) == 0:
 
                             self.grid.set_symmetric_cell(row, column, 1)
@@ -103,7 +110,7 @@ class Game:
 
                             self.grid.set_symmetric_cell(row, column, 0)
 
-                # Move slider while holding mouse button
+                # Move slider or draw while holding mouse button
                 if event.type == pygame.MOUSEMOTION:
 
                     if self.controls.slider_dragging:
@@ -112,10 +119,28 @@ class Game:
                             event.pos[0]
                         )
 
-                # Stop dragging slider
+                    elif self.is_drawing:
+
+                        x, y = event.pos
+
+                        if y < self.simulationSize:
+
+                            row, column = self.grid.screen_to_grid(x, y)
+
+                            current_cell = (row, column)
+
+                            if current_cell != self.last_drawn_cell:
+
+                                self.grid.set_symmetric_cell(row, column, 1)
+
+                                self.last_drawn_cell = current_cell
+
+                # Stop dragging slider or drawing
                 if event.type == pygame.MOUSEBUTTONUP:
 
                     self.controls.slider_dragging = False
+                    self.is_drawing = False
+                    self.last_drawn_cell = None
 
             # Time
             delta_time = self.clock.tick(60) / 1000
