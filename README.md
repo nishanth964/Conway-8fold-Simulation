@@ -115,11 +115,3 @@ When a cell is placed, the program calculates its corresponding positions throug
 * Rotational symmetry
 
 The resulting pattern is therefore mirrored around the center of the simulation.
-
-As generations evolve, the symmetric structure produces complex, mandala-like patterns.
-
-## Project Goal
-
-The goal of this project is to combine the computational rules of **Conway's Game of Life** with geometric symmetry and generative visual effects.
-
-The result is a simulation that is both a programming project and an interactive visual experiment.
