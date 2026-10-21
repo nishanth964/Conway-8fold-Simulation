@@ -115,3 +115,7 @@ When a cell is placed, the program calculates its corresponding positions throug
 * Rotational symmetry
 
 The resulting pattern is therefore mirrored around the center of the simulation.
+
+## Demo Video
+
+https://github.com/user-attachments/assets/d5e4d632-f627-4972-8e65-974b4eec76ee
