@@ -4,6 +4,10 @@ A visual implementation of **Conway's Game of Life** built with Python and Pygam
 
 Instead of a normal Game of Life simulation, this project adds **8-fold symmetry** to the way cells are placed. When you place a cell, the same cell is placed in its symmetrical positions around the center. This creates patterns that evolve while keeping their 8-fold symmetry.
 
+## Demo Video
+
+https://github.com/user-attachments/assets/d5e4d632-f627-4972-8e65-974b4eec76ee
+
 ## What is Conway: Game of life
 
 Conway's Game of Life is a cellular automaton created by mathematician John Conway. It is a simulation made up of a grid of cells, where each cell can either be alive or dead. The cells change from one generation to the next depending on how many neighboring cells they have. Unlike other games this game is 0 player game
@@ -115,7 +119,3 @@ When a cell is placed, the program calculates its corresponding positions throug
 * Rotational symmetry
 
 The resulting pattern is therefore mirrored around the center of the simulation.
-
-## Demo Video
-
-https://github.com/user-attachments/assets/d5e4d632-f627-4972-8e65-974b4eec76ee
